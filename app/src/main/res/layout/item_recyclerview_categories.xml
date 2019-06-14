@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="5dp"
+    android:elevation="5dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:background="@drawable/card_background">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/categoryContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/categoryImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_baseline_category_24px"
+            android:tint="@color/colorMetal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Kitchen"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorMetal"
+            app:layout_constraintStart_toEndOf="@+id/categoryImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/selectImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_check_box_outline_blank_black_24dp"
+            android:tint="@color/colorMetal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

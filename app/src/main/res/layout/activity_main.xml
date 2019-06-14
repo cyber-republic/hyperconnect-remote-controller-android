@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="191dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="10dp"
+                app:srcCompat="@drawable/hyper_connect_logo"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+           <android.support.v7.widget.AppCompatImageButton
+               android:id="@+id/notificationsButton"
+               android:layout_width="wrap_content"
+               android:layout_height="48dp"
+               android:src="@drawable/ic_notifications_black_24dp"
+               android:tint="@color/colorWhite"
+               android:backgroundTint="@color/colorPrimary"
+               android:adjustViewBounds="true"
+               android:scaleType="fitCenter"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorFlash"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorMetal"
+        app:itemIconTint="@drawable/bottom_navigation_background"
+        app:itemTextColor="@drawable/bottom_navigation_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+</android.support.constraint.ConstraintLayout>

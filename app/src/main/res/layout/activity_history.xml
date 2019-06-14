@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorFlash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_back"
+                android:drawableStart="@drawable/ic_baseline_arrow_back_ios_24px"
+                android:drawableTint="@color/colorWhite"
+                android:drawablePadding="-20dp"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/colorWhite"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_history"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="5dp"
+            android:background="@drawable/card_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/chartTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="temp"
+                    android:textColor="@color/colorMetal"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+                <!--<LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/favoriteButton"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginEnd="5dp"
+                        android:paddingTop="10dp"
+                        android:src="@drawable/ic_star_border_black_24dp"
+                        android:tint="@color/colorMetal"
+                        android:background="@color/colorTransparent"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"/>
+                </LinearLayout>-->
+
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>
