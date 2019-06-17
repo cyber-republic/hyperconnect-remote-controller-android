@@ -45,6 +45,7 @@ import com.hyper.connect.database.entity.enums.AttributeState;
 import com.hyper.connect.database.entity.Device;
 import com.hyper.connect.database.entity.enums.AttributeType;
 import com.hyper.connect.database.entity.enums.DeviceConnectionState;
+import com.hyper.connect.database.entity.enums.DeviceState;
 import com.hyper.connect.elastos.ElastosCarrier;
 import com.hyper.connect.management.AttributeManagement;
 import com.hyper.connect.page.history.HistoryActivity;
@@ -131,7 +132,7 @@ public class AttributeListAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i){
-        if(attributeList!=null){
+        if(attributeList!=null && device!=null){
             Attribute attribute=attributeList.get(i);
             int viewHolderType=viewHolder.getItemViewType();
             if(viewHolderType==VIEW_TYPE_ATTRIBUTE_INPUT){
@@ -181,7 +182,7 @@ public class AttributeListAdapter extends RecyclerView.Adapter implements Filter
         }
 
         void bind(Attribute attribute){
-            if(device.getConnectionState()==DeviceConnectionState.ONLINE){
+            if(!device.getDeletedState() && device.getState()==DeviceState.ACTIVE && device.getConnectionState()==DeviceConnectionState.ONLINE){
                 if(!attributeManagement.isAttributeRunning(attribute.getId())){
                     attributeManagement.startAttribute(deviceUserId, attribute.getId(), attribute.getEdgeAttributeId());
                 }

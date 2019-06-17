@@ -80,10 +80,8 @@ public abstract class LocalRoomDatabase extends RoomDatabase{
 
         @Override
         protected Void doInBackground(final Void... params){
-            Device device=new Device(1, "J1s9bhQJnR8gqWdJpNEfvVQ3ZP1KUqBXxSb8KQPwio3X", "eQ525ffnwHko97n9PWXr99Vu91hwfGyDWXjp5u6qauWYqrQCrx75", "Device1", DeviceState.ACTIVE, DeviceConnectionState.OFFLINE);
+            Device device=new Device(1, "J1s9bhQJnR8gqWdJpNEfvVQ3ZP1KUqBXxSb8KQPwio3X", "eQ525ffnwHko97n9PWXr99Vu91hwfGyDWXjp5u6qauWYqrQCrx75", "Device1", DeviceState.ACTIVE, DeviceConnectionState.OFFLINE, false);
             deviceDao.insert(device);
-            Device device2=new Device(2, "BvDjoMK2XMrNHydTuaGpaMGTYRU4QyVh5sFuivYyVyrc", "QznAmC1SGKdcn3FN5A6hrHgn3RvP7pTo2Ze8xmbEvWvHHHoScd2A", "Device2", DeviceState.ACTIVE, DeviceConnectionState.OFFLINE);
-            deviceDao.insert(device2);
 
             return null;
         }

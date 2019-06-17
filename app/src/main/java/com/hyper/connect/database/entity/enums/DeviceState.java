@@ -2,7 +2,8 @@ package com.hyper.connect.database.entity.enums;
 
 public enum DeviceState{
     ACTIVE,
-    PENDING;
+    PENDING,
+    DEACTIVATED;
 
     public int getValue(){
         switch(this){
@@ -10,6 +11,8 @@ public enum DeviceState{
                 return 0;
             case PENDING:
                 return 1;
+            case DEACTIVATED:
+                return 2;
             default:
                 throw new IllegalArgumentException("Invalid Device State");
         }
@@ -22,6 +25,8 @@ public enum DeviceState{
                 return "Active";
             case PENDING:
                 return "Pending";
+            case DEACTIVATED:
+                return "Deactivated";
             default:
                 throw new IllegalArgumentException("Invalid Device State");
         }

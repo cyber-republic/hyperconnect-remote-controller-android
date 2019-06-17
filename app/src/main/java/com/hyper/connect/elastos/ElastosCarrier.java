@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hyper.connect.app.GlobalApplication;
 import com.hyper.connect.app.LocalRepository;
 import com.hyper.connect.database.entity.Attribute;
 import com.hyper.connect.database.entity.DataRecord;
@@ -211,10 +212,13 @@ public class ElastosCarrier extends Thread{
 						}
 					}
 				}
-				JsonObject jsonObject=new JsonObject();
-				jsonObject.addProperty("command", "getData");
-				String jsonString=jsonObject.toString();
-				sendFriendMessage(friendId, jsonString);
+
+				if(device.getState()==DeviceState.ACTIVE){
+					JsonObject jsonObject=new JsonObject();
+					jsonObject.addProperty("command", "getData");
+					String jsonString=jsonObject.toString();
+					sendFriendMessage(friendId, jsonString);
+				}
 			}
 			else if(status==ConnectionStatus.Disconnected){
 				device.setConnectionState(DeviceConnectionState.OFFLINE);
@@ -416,6 +420,21 @@ public class ElastosCarrier extends Thread{
 				}
 
 				historyActivity.setDataRecordList(dataRecordList);
+			}
+			else if(command.equals("changeControllerState")){
+				boolean state=resultObject.get("state").getAsBoolean();
+				if(state){
+					device.setState(DeviceState.ACTIVE);
+					JsonObject jsonObject=new JsonObject();
+					jsonObject.addProperty("command", "getData");
+					String jsonString=jsonObject.toString();
+					sendFriendMessage(from, jsonString);
+				}
+				else{
+					device.setState(DeviceState.DEACTIVATED);
+					GlobalApplication.getAttributeManagement().stopAllAttributes();
+				}
+				localRepository.updateDevice(device);
 			}
 
 			syncher.wakeup();

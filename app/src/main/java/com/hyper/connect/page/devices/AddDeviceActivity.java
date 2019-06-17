@@ -17,6 +17,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.hyper.connect.R;
 import com.hyper.connect.app.GlobalApplication;
+import com.hyper.connect.app.LocalRepository;
 import com.hyper.connect.database.entity.Device;
 import com.hyper.connect.database.entity.enums.DeviceConnectionState;
 import com.hyper.connect.database.entity.enums.DeviceState;
@@ -42,8 +43,6 @@ public class AddDeviceActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
-
-        GlobalApplication.getElastosCarrier().removeFriend("BvDjoMK2XMrNHydTuaGpaMGTYRU4QyVh5sFuivYyVyrc");
 
         barcodeView=findViewById(R.id.barcodeView);
         openCamera();
@@ -126,22 +125,42 @@ public class AddDeviceActivity extends AppCompatActivity{
 
     private void addDevice(String deviceAddress){
         ElastosCarrier elastosCarrier=GlobalApplication.getElastosCarrier();
+        LocalRepository localRepository=GlobalApplication.getLocalRepository();
         String deviceName=deviceNameInput.getText().toString();
-        boolean addressCheck=elastosCarrier.isValidAddress(deviceAddress);
-        if(addressCheck){
-            Device device=new Device(0, "undefined", deviceAddress, deviceName, DeviceState.PENDING, DeviceConnectionState.OFFLINE);
-            boolean addCheck=elastosCarrier.addFriend(device);
-            if(addCheck){
-                stopCamera();
-                setResult(RESULT_OK);
-                finish();
-            }
-            else{
-                Snackbar.make(barcodeView, R.string.snack_something_went_wrong, Snackbar.LENGTH_SHORT).show();
-            }
+
+        if(deviceName.isEmpty()){
+            Snackbar.make(finishButton, R.string.snack_device_name_empty, Snackbar.LENGTH_SHORT).show();
         }
         else{
-            Snackbar.make(barcodeView, R.string.snack_device_address_not_valid, Snackbar.LENGTH_SHORT).show();
+            Device device=localRepository.getDeviceByAddress(deviceAddress);
+            if(device==null){
+                boolean addressCheck=elastosCarrier.isValidAddress(deviceAddress);
+                if(addressCheck){
+                    Device newDevice=new Device(0, "undefined", deviceAddress, deviceName, DeviceState.PENDING, DeviceConnectionState.OFFLINE, false);
+                    boolean addCheck=elastosCarrier.addFriend(newDevice);
+                    if(addCheck){
+                        stopCamera();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                    else{
+                        Snackbar.make(barcodeView, R.string.snack_something_went_wrong, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Snackbar.make(barcodeView, R.string.snack_device_address_not_valid, Snackbar.LENGTH_SHORT).show();
+                }
+            }
+            else{
+                if(device.getDeletedState()){
+                    device.setName(deviceName);
+                    device.setDeletedState(false);
+                    localRepository.updateDevice(device);
+                    stopCamera();
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            }
         }
     }
 }

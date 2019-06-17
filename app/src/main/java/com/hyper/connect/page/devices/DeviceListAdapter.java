@@ -72,7 +72,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     public void onBindViewHolder(@NonNull DeviceViewHolder deviceViewHolder, int i){
         if(deviceList!=null){
             Device device=deviceList.get(i);
-            deviceViewHolder.bind(device);
+                deviceViewHolder.bind(device);
         }
     }
 
@@ -109,7 +109,6 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
         void bind(Device device){
             nameText.setText(device.getName());
-
             if(device.getState()==DeviceState.ACTIVE){
                 if(device.getConnectionState()==DeviceConnectionState.ONLINE){
                     statusText.setText(R.string.text_online);
@@ -136,8 +135,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                     appContext.startActivity(intent);
                 });
             }
-            else if(device.getState()==DeviceState.PENDING){
-                statusText.setText(R.string.text_pending);
+            else if(device.getState()==DeviceState.PENDING || device.getState()==DeviceState.DEACTIVATED){
+                //statusText.setText(R.string.text_pending);
+                statusText.setText(device.getState().toString());
                 statusImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorOrange)));
                 sensorsButton.setBackgroundResource(R.drawable.button_disabled_background);
                 sensorsButton.setOnClickListener(viewButton -> Snackbar.make(sensorsButton, R.string.text_activate_device, Snackbar.LENGTH_SHORT).show());
@@ -236,14 +236,19 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                 AppCompatButton confirmButton=dialog.findViewById(R.id.confirmButton);
                 confirmButton.setOnClickListener(viewButton -> {
                     dialog.dismiss();
-                    boolean removeCheck=elastosCarrier.removeFriend(device.getUserId());
+
+                    device.setDeletedState(true);
+                    localRepository.updateDevice(device);
+                    Snackbar.make(moreButton, R.string.snack_remove_device, Snackbar.LENGTH_SHORT).show();
+
+                    /*boolean removeCheck=elastosCarrier.removeFriend(device.getUserId());
                     if(removeCheck){
                         localRepository.deleteDevice(device);
                         Snackbar.make(moreButton, R.string.snack_remove_device, Snackbar.LENGTH_SHORT).show();
                     }
                     else{
                         Snackbar.make(moreButton, R.string.snack_something_went_wrong, Snackbar.LENGTH_SHORT).show();
-                    }
+                    }*/
                 });
                 dialog.show();
             });

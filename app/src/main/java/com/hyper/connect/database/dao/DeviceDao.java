@@ -31,7 +31,7 @@ public interface DeviceDao{
     @Query("SELECT * FROM device_table")
     List<Device> getDeviceList();
 
-    @Query("SELECT * FROM device_table")
+    @Query("SELECT * FROM device_table WHERE deletedState = 0")
     LiveData<List<Device>> getLiveDeviceList();
 
     @Query("SELECT * FROM device_table WHERE id = :id")
@@ -39,6 +39,9 @@ public interface DeviceDao{
 
     @Query("SELECT * FROM device_table WHERE userId = :userId")
     Device getDeviceByUserId(String userId);
+
+    @Query("SELECT * FROM device_table WHERE address = :address")
+    Device getDeviceByAddress(String address);
 
     @Query("SELECT * FROM device_table WHERE id = :id")
     LiveData<Device> getLiveDeviceById(int id);

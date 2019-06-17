@@ -41,18 +41,23 @@ public class Device{
     @ColumnInfo(name="connectionState")
     private DeviceConnectionState connectionState;
 
+    @NonNull
+    @ColumnInfo(name="deletedState")
+    private boolean deletedState;
+
     @Ignore
     public Device(@NonNull String name){
         this.name=name;
     }
 
-    public Device(int id, @NonNull String userId, @NonNull String address, @NonNull String name, @NonNull DeviceState state, @NonNull DeviceConnectionState connectionState){
+    public Device(int id, @NonNull String userId, @NonNull String address, @NonNull String name, @NonNull DeviceState state, @NonNull DeviceConnectionState connectionState, boolean deletedState){
         this.id=id;
         this.userId=userId;
         this.address=address;
         this.name=name;
         this.state=state;
         this.connectionState=connectionState;
+        this.deletedState=deletedState;
     }
 
     public int getId(){
@@ -84,6 +89,10 @@ public class Device{
         return connectionState;
     }
 
+    public boolean getDeletedState(){
+        return deletedState;
+    }
+
     public void setId(int id){
         this.id=id;
     }
@@ -108,6 +117,10 @@ public class Device{
         this.connectionState=connectionState;
     }
 
+    public void setDeletedState(boolean deletedState){
+        this.deletedState=deletedState;
+    }
+
     @Override
     public String toString(){
         return "Device{"+
@@ -117,6 +130,7 @@ public class Device{
                 ", name='"+name+'\''+
                 ", state="+state+
                 ", connectionState="+connectionState+
+                ", deletedState="+deletedState+
                 '}';
     }
 }

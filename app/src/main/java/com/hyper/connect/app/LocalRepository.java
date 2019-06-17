@@ -118,6 +118,35 @@ public class LocalRepository{
         return deviceDao.getDeviceByUserId(userId);
     }
 
+    public Device getDeviceByAddress(String address){
+        Device device=null;
+        try{
+            device=new GetDeviceByAddressAsyncTask(deviceDao).execute(address).get();
+        }
+        catch(ExecutionException e){
+            e.printStackTrace();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        return device;
+    }
+
+    private static class GetDeviceByAddressAsyncTask extends AsyncTask<String, Void, Device>{
+        private DeviceDao deviceDao;
+
+        private GetDeviceByAddressAsyncTask(DeviceDao deviceDao){
+            this.deviceDao=deviceDao;
+        }
+
+        @Override
+        protected Device doInBackground(String... params){
+            String address=params[0];
+            Device device=deviceDao.getDeviceByAddress(address);
+            return device;
+        }
+    }
+
     public LiveData<Device> getLiveDeviceByUserId(String userId){
         return deviceDao.getLiveDeviceByUserId(userId);
     }

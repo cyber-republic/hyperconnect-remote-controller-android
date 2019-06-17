@@ -14,6 +14,9 @@ public class DeviceStateConverter {
         else if(state==DeviceState.PENDING.getValue()){
             return DeviceState.PENDING;
         }
+        else if(state==DeviceState.DEACTIVATED.getValue()){
+            return DeviceState.DEACTIVATED;
+        }
         else{
             throw new IllegalArgumentException("Invalid Device State");
         }
