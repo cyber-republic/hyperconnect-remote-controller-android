@@ -14,7 +14,7 @@ The Remote Controller is the software component of the HyperConnect IoT Framewor
 - Load the .APK onto your Android device manually.
 
 #### (Option Three) Build from source code
-Step 1. Download the source code for the Android Studio from: https://github.com/cyber-republic/hyperconnect-remote-controller-android
+**Step 1.** Download the source code for the Android Studio from: https://github.com/cyber-republic/hyperconnect-remote-controller-android
 
 - Download by clicking the green button "Clone or download" on the GitHub repository.
 - Or using Git:
@@ -22,8 +22,26 @@ Step 1. Download the source code for the Android Studio from: https://github.com
 git clone https://github.com/cyber-republic/hyperconnect-remote-controller-android
 ```
 
-Step 2. Import the Android Studio project into Android Studio.
+**Step 2.** The Elastos Carrier Android SDK in the next step requires the Elastos **Native Carrier** to be built previously. Follow the steps described at https://github.com/elastos/Elastos.NET.Carrier.Native.SDK to build the required files.
 
-Step 3. Build the project.
+**Step 3.** Follow the steps to build the Elastos Carrier Android SDK: https://github.com/elastos/Elastos.NET.Carrier.Android.SDK
 
-Step 4. Start the Android Emulator.
+**Step 4.** Open the HyperConnect Android Studio project in the Android Studio IDE.
+
+**Step 5.** Build the project.
+
+**Step 6.** Start the Android Emulator.
+
+### Libraries
+
+- Elastos Carrier Native SDK: https://github.com/elastos/Elastos.NET.Carrier.Native.SDK
+- Elastos Carrier Android SDK: https://github.com/elastos/Elastos.NET.Carrier.Android.SDK
+
+### Contribution
+We welcome contributions to the HyperConnect IoT Project.
+
+### Acknowledgments
+A sincere thank you to all teams and projects that we rely on directly or indirectly.
+
+### License
+This project is licensed under the terms of the [GPLv3 license](https://github.com/cyber-republic/hyperconnect-remote-controller-android/blob/readme/LICENSE).
