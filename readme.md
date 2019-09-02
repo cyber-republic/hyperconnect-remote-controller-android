@@ -7,7 +7,7 @@ The Remote Controller is the software component of the HyperConnect IoT Framewor
 ### Installation
 
 #### (Option One) Download from Google Play Store
-- Coming soon.
+- Download from Google Play Store: https://play.google.com/store/apps/details?id=com.hyper.connect
 
 #### (Option Two) Download .APK
 - The latest .APK file is located at: https://github.com/cyber-republic/hyperconnect-remote-controller-android/tree/master/demo
