@@ -136,7 +136,7 @@ public class AddDeviceActivity extends AppCompatActivity{
             if(device==null){
                 boolean addressCheck=elastosCarrier.isValidAddress(deviceAddress);
                 if(addressCheck){
-                    Device newDevice=new Device(0, "undefined", deviceAddress, deviceName, DeviceState.PENDING, DeviceConnectionState.OFFLINE, false);
+                    Device newDevice=new Device(0, "undefined", deviceAddress, deviceName, DeviceState.PENDING, DeviceConnectionState.OFFLINE);
                     boolean addCheck=elastosCarrier.addFriend(newDevice);
                     if(addCheck){
                         stopCamera();
@@ -149,16 +149,6 @@ public class AddDeviceActivity extends AppCompatActivity{
                 }
                 else{
                     Snackbar.make(barcodeView, R.string.snack_device_address_not_valid, Snackbar.LENGTH_SHORT).show();
-                }
-            }
-            else{
-                if(device.getDeletedState()){
-                    device.setName(deviceName);
-                    device.setDeletedState(false);
-                    localRepository.updateDevice(device);
-                    stopCamera();
-                    setResult(RESULT_OK);
-                    finish();
                 }
             }
         }

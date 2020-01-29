@@ -1,6 +1,8 @@
 package com.hyper.connect;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity{
     public static final int ACTION_REQUEST_ADD_DEVICE=0;
     public static final int ACTION_REQUEST_ADD_EVENT=1;
     public static final int PERMISSION_REQUEST_CODE_CAMERA=0;
+    public static final int PERMISSION_REQUEST_CODE_STORAGE=1;
     public static final String ACTION_RESPONSE_KEYWORD="response";
     public static final int ACTION_RESULT_SUCCESS=0;
 
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity{
 
         NotificationManagerCompat notificationManager=NotificationManagerCompat.from(this);
         notificationManager.cancelAll();
+
+        //requestStoragePermission();
     }
 
     @Override
@@ -160,5 +165,26 @@ public class MainActivity extends AppCompatActivity{
                 return 3;
             }
         });
+    }
+
+    /*private void requestStoragePermission(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE);
+        }
+    }*/
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch(requestCode){
+            case PERMISSION_REQUEST_CODE_STORAGE:{
+                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //do nothing
+                }
+                else{
+                    Snackbar.make(viewPager, R.string.snack_cannot_use_file_sharing, Snackbar.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 }

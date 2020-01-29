@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="500dp"
             android:orientation="vertical"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
@@ -82,32 +82,219 @@
                     android:textColor="@color/colorMetal"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
-                <!--<LinearLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end">
                     <android.support.v7.widget.AppCompatImageButton
-                        android:id="@+id/favoriteButton"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:id="@+id/liveButton"
+                        android:clickable="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:paddingTop="10dp"
-                        android:src="@drawable/ic_star_border_black_24dp"
-                        android:tint="@color/colorMetal"
-                        android:background="@color/colorTransparent"
+                        android:layout_marginTop="10dp"
+                        android:tooltipText="@string/button_live"
+                        android:src="@drawable/ic_play_arrow_black_24dp"
+                        android:tint="@color/colorWhite"
+                        android:background="@drawable/button_disabled_background"
                         android:scaleType="fitCenter"
                         android:adjustViewBounds="true"
                         android:minWidth="0dp"
                         android:minHeight="0dp"/>
-                </LinearLayout>-->
-
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/advancedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="10dp"
+                        android:tooltipText="@string/button_advanced"
+                        android:src="@drawable/ic_art_track_black_24dp"
+                        android:tint="@color/colorWhite"
+                        android:background="@drawable/button_background"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/typeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/button_live"
+                android:textColor="@color/colorMetal"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:id="@+id/filterLayout"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/windowSpinner"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"/>
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/averageSpinner"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+                    <LinearLayout
+                        android:id="@+id/dateLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="20dp">
+                        <EditText
+                            android:id="@+id/dateText"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:hint="@string/hint_select_date"
+                            android:textSize="15sp"
+                            android:enabled="false"/>
+                        <android.support.v7.widget.AppCompatImageButton
+                            android:id="@+id/dateButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_date_range_black_24dp"
+                            android:tint="@color/colorGray"
+                            android:background="@color/colorTransparent"
+                            android:scaleType="fitCenter"
+                            android:adjustViewBounds="true"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"/>
+                    </LinearLayout>
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/hourSpinner"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/monthSpinner"
+                        android:visibility="gone"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/searchButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_youtube_searched_for_black_24dp"
+                        android:tint="@color/colorWhite"
+                        android:background="@drawable/button_background"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"/>
+                </LinearLayout>
+            </LinearLayout>
+            <WebView
+                android:id="@+id/advancedWebView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"/>
+            <LinearLayout
+                android:id="@+id/advancedEmptyPlaceholder"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filterLayout"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_placeholder_advanced_charts_1"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMetal"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_placeholder_advanced_charts_2"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMetal"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <WebView
-                android:id="@+id/webView"
+                android:id="@+id/liveWebView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"/>
+            <LinearLayout
+                android:id="@+id/liveEmptyPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="60dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filterLayout"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_placeholder_live_charts_1"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMetal"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_placeholder_live_charts_2"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorMetal"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/fadeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBlack"
+                    android:alpha="0.2"/>
+                <ProgressBar
+                    android:id="@+id/pBar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:progressTint="@color/colorBlack"
+                    android:layout_centerInParent="true">
+                </ProgressBar>
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 

@@ -12,7 +12,6 @@ import com.hyper.connect.database.dao.CategoryRecordDao;
 import com.hyper.connect.database.dao.DataRecordDao;
 import com.hyper.connect.database.dao.DeviceDao;
 import com.hyper.connect.database.dao.EventDao;
-import com.hyper.connect.database.dao.FavoriteChartDao;
 import com.hyper.connect.database.dao.NotificationDao;
 import com.hyper.connect.database.dao.SensorDao;
 import com.hyper.connect.database.entity.Attribute;
@@ -21,7 +20,6 @@ import com.hyper.connect.database.entity.CategoryRecord;
 import com.hyper.connect.database.entity.DataRecord;
 import com.hyper.connect.database.entity.Device;
 import com.hyper.connect.database.entity.Event;
-import com.hyper.connect.database.entity.FavoriteChart;
 import com.hyper.connect.database.entity.Notification;
 import com.hyper.connect.database.entity.Sensor;
 import com.hyper.connect.database.entity.enums.AttributeDirection;
@@ -39,7 +37,6 @@ public class LocalRepository{
     private NotificationDao notificationDao;
     private CategoryDao categoryDao;
     private CategoryRecordDao categoryRecordDao;
-    private FavoriteChartDao favoriteChartDao;
     private Device tempDevice;
     private MutableLiveData<Boolean> carrierConnectionState;
 
@@ -53,7 +50,6 @@ public class LocalRepository{
         notificationDao=localRoomDatabase.notificationDao();
         categoryDao=localRoomDatabase.categoryDao();
         categoryRecordDao=localRoomDatabase.categoryRecordDao();
-        favoriteChartDao=localRoomDatabase.favoriteChartDao();
         carrierConnectionState=new MutableLiveData<Boolean>();
         carrierConnectionState.postValue(false);
     }
@@ -397,20 +393,26 @@ public class LocalRepository{
     }
 
     public void deleteAttribute(Attribute attribute){
-        new DeleteAttributeAsyncTask(attributeDao).execute(attribute);
+        new DeleteAttributeAsyncTask(attributeDao, categoryRecordDao).execute(attribute);
     }
 
     private static class DeleteAttributeAsyncTask extends AsyncTask<Attribute, Void, Void>{
         private AttributeDao attributeDao;
+        private CategoryRecordDao categoryRecordDao;
 
-        private DeleteAttributeAsyncTask(AttributeDao attributeDao){
+        private DeleteAttributeAsyncTask(AttributeDao attributeDao, CategoryRecordDao categoryRecordDao){
             this.attributeDao=attributeDao;
+            this.categoryRecordDao=categoryRecordDao;
         }
 
         @Override
         protected Void doInBackground(Attribute... params){
             Attribute attribute=params[0];
             attributeDao.deleteAttributeById(attribute.getId());
+            List<CategoryRecord> categoryRecordList=categoryRecordDao.getCategoryRecordListByAttributeId(attribute.getId());
+            for(CategoryRecord categoryRecord : categoryRecordList){
+                categoryRecordDao.deleteCategoryRecordByCategoryIdAndAttributeId(categoryRecord.getCategoryId(), categoryRecord.getAttributeId());
+            }
             return null;
         }
     }
@@ -572,48 +574,5 @@ public class LocalRepository{
 
     public LiveData<Integer> getLiveActiveEventCount(){
         return eventDao.getLiveActiveEventCount();
-    }
-
-    public LiveData<List<FavoriteChart>> getLiveFavoriteChartList(){
-        return favoriteChartDao.getLiveFavoriteChartList();
-    }
-
-    public void insertFavoriteChart(FavoriteChart favoriteChart){
-        new InsertFavoriteChartAsyncTask(favoriteChartDao).execute(favoriteChart);
-    }
-
-    private static class InsertFavoriteChartAsyncTask extends AsyncTask<FavoriteChart, Void, Void>{
-        private FavoriteChartDao favoriteChartDao;
-
-        private InsertFavoriteChartAsyncTask(FavoriteChartDao favoriteChartDao){
-            this.favoriteChartDao=favoriteChartDao;
-        }
-
-        @Override
-        protected Void doInBackground(FavoriteChart... params){
-            FavoriteChart favoriteChart=params[0];
-            favoriteChartDao.insert(favoriteChart);
-
-            return null;
-        }
-    }
-
-    public void deleteFavoriteChart(){
-        new DeleteFavoriteChartAsyncTask(favoriteChartDao).execute();
-    }
-
-    private static class DeleteFavoriteChartAsyncTask extends AsyncTask<Void, Void, Void>{
-        private FavoriteChartDao favoriteChartDao;
-
-        private DeleteFavoriteChartAsyncTask(FavoriteChartDao favoriteChartDao){
-            this.favoriteChartDao=favoriteChartDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params){
-            favoriteChartDao.deleteFavoriteChart();
-
-            return null;
-        }
     }
 }

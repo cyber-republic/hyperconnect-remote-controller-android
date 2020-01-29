@@ -58,6 +58,10 @@
     <string name="text_favourite_chart">Favourite Chart</string>
     <string name="text_chart_pinned">Chart has been pinned to dashboard.</string>
     <string name="text_chart_unpinned">Chart has been unpinned from dashboard.</string>
+    <string name="text_placeholder_live_charts_1">No Data</string>
+    <string name="text_placeholder_live_charts_2">Waiting for live values.</string>
+    <string name="text_placeholder_advanced_charts_1">No Data</string>
+    <string name="text_placeholder_advanced_charts_2">Search by other filter.</string>
 
     <string name="button_home">Home</string>
     <string name="button_finish">Finish</string>
@@ -76,6 +80,8 @@
     <string name="button_add">Add</string>
     <string name="button_back">Back</string>
     <string name="button_categories">Categories</string>
+    <string name="button_live">Live</string>
+    <string name="button_advanced">Advanced</string>
 
 
     <string name="hint_enter_device_name">Please type the device name.</string>
@@ -85,6 +91,7 @@
     <string name="hint_enter_event_trigger_value">Event Trigger Value (required)</string>
     <string name="hint_enter_event_name">Event Name (required)</string>
     <string name="hint_enter_category_name">Enter Category Name</string>
+    <string name="hint_select_date">-- Select Date --</string>
 
 
     <string name="snack_device_name_empty">Device Name is empty.</string>
@@ -117,7 +124,10 @@
     <string name="snack_event_trigger_value_is_empty">Trigger Value is empty.</string>
     <string name="snack_event_name_is_empty">Event Name is empty.</string>
     <string name="snack_attribute_script_state_must_be_valid">Script state must be valid.</string>
-
+    <string name="snack_cannot_use_file_sharing">You cannot use the file sharing feature for history.</string>
+    <string name="snack_all_options_must_be_selected">All options must be selected.</string>
+    <string name="snack_data_transfer_error">Data Transfer Error.</string>
+    <string name="snack_chart_is_loading">Chart is loading.</string>
 
 
     <string name="dialog_title_remove_device">Remove Device</string>

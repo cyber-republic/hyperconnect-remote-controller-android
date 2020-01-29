@@ -182,7 +182,7 @@ public class AttributeListAdapter extends RecyclerView.Adapter implements Filter
         }
 
         void bind(Attribute attribute){
-            if(!device.getDeletedState() && device.getState()==DeviceState.ACTIVE && device.getConnectionState()==DeviceConnectionState.ONLINE){
+            if(device.getState()==DeviceState.ACTIVE && device.getConnectionState()==DeviceConnectionState.ONLINE && attribute.getState()==AttributeState.ACTIVE){
                 if(!attributeManagement.isAttributeRunning(attribute.getId())){
                     attributeManagement.startAttribute(deviceUserId, attribute.getId(), attribute.getEdgeAttributeId());
                 }
@@ -246,14 +246,14 @@ public class AttributeListAdapter extends RecyclerView.Adapter implements Filter
                         jsonObject.addProperty("command", "changeAttributeState");
                         jsonObject.addProperty("id", attribute.getEdgeAttributeId());
                         jsonObject.addProperty("state", isChecked);
-                        String jsonString=jsonObject.toString();
-                        boolean sendCheck=elastosCarrier.sendFriendMessage(deviceUserId, jsonString);
+                        boolean sendCheck=elastosCarrier.sendFriendMessage(deviceUserId, jsonObject.toString());
                         if(sendCheck){
                             if(isChecked){
                                 attribute.setState(AttributeState.ACTIVE);
                             }
                             else{
                                 attribute.setState(AttributeState.DEACTIVATED);
+                                attributeManagement.stopAttribute(attribute.getId());
                             }
                             localRepository.updateAttribute(attribute);
                             Snackbar.make(deviceNameText, R.string.snack_attribute_state_changed, Snackbar.LENGTH_SHORT).show();
@@ -307,13 +307,19 @@ public class AttributeListAdapter extends RecyclerView.Adapter implements Filter
                 historyButton.setVisibility(View.VISIBLE);
             }
             historyButton.setOnClickListener(buttonView -> {
-                Intent intent=new Intent(appContext, HistoryActivity.class);
-                intent.putExtra("deviceUserId", device.getUserId());
-                intent.putExtra("edgeAttributeId", attribute.getEdgeAttributeId());
-                intent.putExtra("attributeName", attribute.getName());
-                intent.putExtra("attributeId", attribute.getId());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                appContext.startActivity(intent);
+                //if(device.getConnectionState()==DeviceConnectionState.ONLINE){
+                    Intent intent=new Intent(appContext, HistoryActivity.class);
+                    intent.putExtra("deviceId", device.getId());
+                    intent.putExtra("deviceUserId", device.getUserId());
+                    intent.putExtra("edgeAttributeId", attribute.getEdgeAttributeId());
+                    intent.putExtra("attributeName", attribute.getName());
+                    intent.putExtra("attributeId", attribute.getId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    appContext.startActivity(intent);
+                /*}
+                else{
+                    Snackbar.make(deviceNameText, R.string.snack_device_offline, Snackbar.LENGTH_SHORT).show();
+                }*/
             });
 
             addCategoryButton.setOnClickListener(buttonView -> {
@@ -401,8 +407,7 @@ public class AttributeListAdapter extends RecyclerView.Adapter implements Filter
                         jsonObject.addProperty("command", "changeAttributeState");
                         jsonObject.addProperty("id", attribute.getEdgeAttributeId());
                         jsonObject.addProperty("state", isChecked);
-                        String jsonString=jsonObject.toString();
-                        boolean sendCheck=elastosCarrier.sendFriendMessage(deviceUserId, jsonString);
+                        boolean sendCheck=elastosCarrier.sendFriendMessage(deviceUserId, jsonObject.toString());
                         if(sendCheck){
                             if(isChecked){
                                 attribute.setState(AttributeState.ACTIVE);

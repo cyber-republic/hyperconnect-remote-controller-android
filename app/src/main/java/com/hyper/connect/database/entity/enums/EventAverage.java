@@ -73,6 +73,29 @@ public enum EventAverage{
         }
     }
 
+    public String getShortFilename(){
+        switch(this){
+            case REAL_TIME:
+                return "";
+            case ONE_MINUTE:
+                return "1m";
+            case FIVE_MINUTES:
+                return "5m";
+            case FIFTEEN_MINUTES:
+                return "15m";
+            case ONE_HOUR:
+                return "1h";
+            case THREE_HOURS:
+                return "3h";
+            case SIX_HOURS:
+                return "6h";
+            case ONE_DAY:
+                return "1d";
+            default:
+                throw new IllegalArgumentException("Invalid Event Average");
+        }
+    }
+
     public static EventAverage stringValueOf(String average){
         switch(average){
             case "Real-Time":

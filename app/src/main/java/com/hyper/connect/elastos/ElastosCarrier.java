@@ -1,11 +1,18 @@
 package com.hyper.connect.elastos;
 
 
+import org.apache.commons.io.FilenameUtils;
 import org.elastos.carrier.AbstractCarrierHandler;
 import org.elastos.carrier.Carrier;
 import org.elastos.carrier.ConnectionStatus;
 import org.elastos.carrier.FriendInfo;
 import org.elastos.carrier.exceptions.CarrierException;
+import org.elastos.carrier.filetransfer.FileTransfer;
+import org.elastos.carrier.filetransfer.FileTransferHandler;
+import org.elastos.carrier.filetransfer.FileTransferInfo;
+import org.elastos.carrier.filetransfer.FileTransferState;
+import org.elastos.carrier.filetransfer.Manager;
+import org.elastos.carrier.filetransfer.ManagerHandler;
 
 import android.content.Context;
 import android.provider.ContactsContract;
@@ -37,11 +44,14 @@ import com.hyper.connect.database.entity.enums.NotificationType;
 import com.hyper.connect.elastos.common.Synchronizer;
 import com.hyper.connect.elastos.common.TestOptions;
 import com.hyper.connect.page.history.HistoryActivity;
+import com.hyper.connect.util.CustomUtil;
 
 import java.lang.Thread;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ElastosCarrier extends Thread{
@@ -53,17 +63,28 @@ public class ElastosCarrier extends Thread{
 	private static Carrier carrier;
 	private boolean isConnected=false;
 	private static LocalRepository localRepository;
-
 	private HistoryActivity historyActivity;
+
+	private static Manager fileTransferManager;
+	private static File historyDir=null;
+	private static FileTransfer currentFileTransfer=null;
+	private static FileTransferState fileTransferState=null;
+	private static String currentFileTransferUserId="";
+	private static int transferCount=0;
 
 	public void setHistoryActivity(HistoryActivity historyActivity){
 		this.historyActivity=historyActivity;
 	}
 
 	public ElastosCarrier(Context context){
+		String appPath=getAppPath(context);
 		localRepository=new LocalRepository(context);
-		options=new TestOptions(getAppPath(context));
+		options=new TestOptions(appPath);
 		carrierHandler=new CarrierHandler();
+		historyDir=new File(appPath, "history");
+		if(!historyDir.exists()){
+			historyDir.mkdir();
+		}
 	}
 
 	public LocalRepository getLocalRepository(){
@@ -74,7 +95,11 @@ public class ElastosCarrier extends Thread{
 		try{
 			Carrier.initializeInstance(options, carrierHandler);
 			carrier=Carrier.getInstance();
-			carrier.start(0);
+			carrier.start(1000);
+
+			FileTransferManagerHandler fileTransferManagerHandler=new FileTransferManagerHandler();
+			Manager.initializeInstance(carrier, fileTransferManagerHandler);
+			fileTransferManager=Manager.getInstance();
 
 			synchronized(carrier){
 				carrier.wait();
@@ -126,8 +151,8 @@ public class ElastosCarrier extends Thread{
 	public boolean addFriend(Device device){
 		boolean response=true;
 		try{
-			carrier.addFriend(device.getAddress(), CONTROLLER_CONNECTION_KEYWORD);
 			localRepository.setTempDevice(device);
+			carrier.addFriend(device.getAddress(), CONTROLLER_CONNECTION_KEYWORD);
 		}
 		catch(CarrierException ce){
 			response=false;
@@ -196,34 +221,36 @@ public class ElastosCarrier extends Thread{
 		public void onFriendConnection(Carrier carrier, String friendId, ConnectionStatus status){
 			System.out.println("CarrierHandler - onFriendConnection - "+friendId+" - "+status);
 			Device device=localRepository.getDeviceByUserId(friendId);
-			if(status==ConnectionStatus.Connected){
-				device.setConnectionState(DeviceConnectionState.ONLINE);
-				if(device.getState()==DeviceState.PENDING){
-					device.setState(DeviceState.ACTIVE);
-					List<Device> deviceList=localRepository.getDeviceList();
-					for(Device savedDevice : deviceList){
-						if(!savedDevice.getUserId().equals(friendId)){
-							JsonObject jsonObject=new JsonObject();
-							jsonObject.addProperty("command", "addDevice");
-							jsonObject.addProperty("address", savedDevice.getAddress());
-							jsonObject.addProperty("userId", savedDevice.getUserId());
-							String jsonString=jsonObject.toString();
-							sendFriendMessage(friendId, jsonString);
+			if(device!=null){
+				if(status==ConnectionStatus.Connected){
+					device.setConnectionState(DeviceConnectionState.ONLINE);
+					if(device.getState()==DeviceState.PENDING){
+						device.setState(DeviceState.ACTIVE);
+						List<Device> deviceList=localRepository.getDeviceList();
+						for(Device savedDevice : deviceList){
+							if(!savedDevice.getUserId().equals(friendId)){
+								JsonObject jsonObject=new JsonObject();
+								jsonObject.addProperty("command", "addDevice");
+								jsonObject.addProperty("address", savedDevice.getAddress());
+								jsonObject.addProperty("userId", savedDevice.getUserId());
+								String jsonString=jsonObject.toString();
+								sendFriendMessage(friendId, jsonString);
+							}
 						}
 					}
-				}
 
-				if(device.getState()==DeviceState.ACTIVE){
-					JsonObject jsonObject=new JsonObject();
-					jsonObject.addProperty("command", "getData");
-					String jsonString=jsonObject.toString();
-					sendFriendMessage(friendId, jsonString);
+					if(device.getState()==DeviceState.ACTIVE){
+						JsonObject jsonObject=new JsonObject();
+						jsonObject.addProperty("command", "getData");
+						String jsonString=jsonObject.toString();
+						sendFriendMessage(friendId, jsonString);
+					}
 				}
+				else if(status==ConnectionStatus.Disconnected){
+					device.setConnectionState(DeviceConnectionState.OFFLINE);
+				}
+				localRepository.updateDevice(device);
 			}
-			else if(status==ConnectionStatus.Disconnected){
-				device.setConnectionState(DeviceConnectionState.OFFLINE);
-			}
-			localRepository.updateDevice(device);
 			syncher.wakeup();
 		}
 
@@ -246,7 +273,7 @@ public class ElastosCarrier extends Thread{
 		}
 
 		@Override
-		public void onFriendMessage(Carrier carrier, String from, byte[] message){
+		public void onFriendMessage(Carrier carrier, String from, byte[] message, boolean isOffline){
 			String messageText=new String(message);
 			System.out.println("CarrierHandler - onFriendMessage - "+from+" - "+messageText);
 			Device device=localRepository.getDeviceByUserId(from);
@@ -419,7 +446,7 @@ public class ElastosCarrier extends Thread{
 					dataRecordList.add(dataRecord);
 				}
 
-				historyActivity.setDataRecordList(dataRecordList);
+				historyActivity.setLiveDataRecordList(dataRecordList);
 			}
 			else if(command.equals("changeControllerState")){
 				boolean state=resultObject.get("state").getAsBoolean();
@@ -427,8 +454,7 @@ public class ElastosCarrier extends Thread{
 					device.setState(DeviceState.ACTIVE);
 					JsonObject jsonObject=new JsonObject();
 					jsonObject.addProperty("command", "getData");
-					String jsonString=jsonObject.toString();
-					sendFriendMessage(from, jsonString);
+					sendFriendMessage(from, jsonObject.toString());
 				}
 				else{
 					device.setState(DeviceState.DEACTIVATED);
@@ -438,6 +464,128 @@ public class ElastosCarrier extends Thread{
 			}
 
 			syncher.wakeup();
+		}
+	}
+
+	private class FileTransferManagerHandler implements ManagerHandler{
+		@Override
+		public void onConnectRequest(Carrier carrier, String from, FileTransferInfo info){
+			System.out.println("FileTransferManagerHandler - onConnectRequest - from: "+from);
+			try{
+				if(!(from.equals(currentFileTransferUserId) && transferCount==0)){
+					currentFileTransferUserId=from;
+					currentFileTransfer=fileTransferManager.newFileTransfer(from, info, new TransferHandler(from));
+					currentFileTransfer.acceptConnect();
+				}
+			}
+			catch(CarrierException e){}
+		}
+	}
+
+	public void closeFileTransfer(){
+		fileTransferState=FileTransferState.Closed;
+	}
+
+	private class TransferHandler implements FileTransferHandler{
+		private String userId="";
+		private String localFilename="";
+		private String filePath="";
+		private long receiveDataLen=0;
+		private long receiveFileSize=0;
+		private int tempPercent=-1;
+
+		private TransferHandler(String userId){
+			this.userId=userId;
+		}
+
+		@Override
+		public void onStateChanged(FileTransfer filetransfer, FileTransferState state){
+			System.out.println("TransferHandler - onStateChanged - "+state);
+			if(state==FileTransferState.Failed){
+				JsonObject jsonObject=new JsonObject();
+				jsonObject.addProperty("command", "cleanFileTransfer");
+				jsonObject.addProperty("state", "Closed");
+				sendFriendMessage(userId, jsonObject.toString());
+				historyActivity.showError();
+			}
+		}
+
+		@Override
+		public void onFileRequest(FileTransfer filetransfer, String fileId, String filename, long size){
+			System.out.println("TransferHandler - onFileRequest - "+fileId+" - "+filename);
+			receiveDataLen=0;
+			receiveFileSize=size;
+
+			localFilename=FilenameUtils.getName(filename);
+
+			Device device=localRepository.getDeviceByUserId(userId);
+			File deviceDir=new File(historyDir, Integer.toString(device.getId()));
+			if(!deviceDir.exists()){
+			    deviceDir.mkdir();
+            }
+			File file=new File(deviceDir, localFilename);
+			filePath=file.getAbsolutePath();
+
+			try{
+				filetransfer.pullData(fileId, 0);
+			}
+			catch(Exception e){}
+		}
+
+		@Override
+		public void onPullRequest(FileTransfer filetransfer, String fileId, long offset){
+			System.out.println("TransferHandler - onPullRequest - "+fileId);
+		}
+
+		@Override
+		public boolean onData(FileTransfer filetransfer, String fileId, byte[] data){
+			receiveDataLen+=data.length;
+			int percent=(int)(receiveDataLen*100/receiveFileSize);
+
+			if(tempPercent!=percent){
+				//TODO: update file percent
+				System.out.println("onData "+percent+"%");
+			}
+			tempPercent=percent;
+
+			CustomUtil.byte2File(data, filePath);
+			if(receiveFileSize==receiveDataLen){
+				//TODO: finished
+				System.out.println("Receiving finished");
+				historyActivity.showData();
+
+				transferCount++;
+				if(transferCount==5){
+					currentFileTransferUserId="";
+					transferCount=0;
+					JsonObject jsonObject=new JsonObject();
+					jsonObject.addProperty("command", "cleanFileTransfer");
+					jsonObject.addProperty("state", "Closed");
+					sendFriendMessage(userId, jsonObject.toString());
+				}
+			}
+
+			return true;
+		}
+
+		@Override
+		public void onDataFinished(FileTransfer filetransfer, String fileId){
+			System.out.println("TransferHandler - onDataFinished - "+fileId);
+		}
+
+		@Override
+		public void onPending(FileTransfer filetransfer, String fileId){
+			System.out.println("TransferHandler - onPending - "+fileId);
+		}
+
+		@Override
+		public void onResume(FileTransfer filetransfer, String fileId){
+			System.out.println("TransferHandler - onResume - "+fileId);
+		}
+
+		@Override
+		public void onCancel(FileTransfer filetransfer, String fileId, int status, String reason){
+			System.out.println("TransferHandler - onCancel - "+fileId);
 		}
 	}
 
