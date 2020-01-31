@@ -6,7 +6,6 @@ import android.arch.lifecycle.LiveData;
 
 import com.hyper.connect.app.GlobalApplication;
 import com.hyper.connect.app.LocalRepository;
-import com.hyper.connect.database.entity.FavoriteChart;
 
 import java.util.List;
 
@@ -45,9 +44,5 @@ public class DashboardViewModel extends AndroidViewModel{
 
     public LiveData<Boolean> getCarrierConnectionState(){
         return localRepository.getCarrierConnectionState();
-    }
-
-    public LiveData<List<FavoriteChart>> getLiveFavoriteChartList(){
-        return localRepository.getLiveFavoriteChartList();
     }
 }

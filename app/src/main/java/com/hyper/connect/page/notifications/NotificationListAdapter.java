@@ -141,7 +141,9 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
             dateTimeText.setText(notification.getDateTime());
 
             devicesViewModel.getLiveDeviceByUserId(notification.getDeviceUserId()).observe(notificationsActivity, device -> {
-                deviceNameText.setText(device.getName());
+                if(device!=null){
+                    deviceNameText.setText(device.getName());
+                }
             });
 
         }

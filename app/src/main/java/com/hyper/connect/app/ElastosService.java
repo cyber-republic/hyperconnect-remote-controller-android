@@ -28,7 +28,7 @@ public class ElastosService extends Service{
             Notification notification=new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Hyper Connect")
                     .setContentText("Connection service is running in background.")
-                    .setSmallIcon(R.drawable.ic_dashboard_black_24dp)
+                    .setSmallIcon(R.drawable.ic_hyperconnect_logo_black)
                     .setContentIntent(pendingIntent)
                     .build();
             startForeground(1, notification);

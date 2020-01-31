@@ -65,181 +65,155 @@
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/sourceText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/text_source"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorGray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/separatorView"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <LinearLayout
-            android:id="@+id/sourceDeviceLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sourceText">
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_router_black_24dp"
-                android:tint="@color/colorMetal"/>
-            <TextView
-                android:id="@+id/sourceDeviceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="3dp"
-                android:text="SourceDevice"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorMetal"/>
-        </LinearLayout>
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/sourceDeviceState"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_lens_black_24dp"
-            android:tint="@color/colorGreen"
-            app:layout_constraintEnd_toEndOf="@id/separatorView"
-            app:layout_constraintTop_toBottomOf="@id/sourceText"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sourceDeviceLayout">
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_memory_black_24dp"
-                android:tint="@color/colorMetal"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:elevation="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="5dp"
+            android:paddingBottom="3dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:background="@drawable/card_background">
             <TextView
-                android:id="@+id/sourceAttributeText"
+                android:id="@+id/sourceText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="3dp"
-                android:text="SourceAttribute"
-                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/text_source"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/colorMetal"/>
-        </LinearLayout>
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/sourceAttributeState"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_lens_black_24dp"
-            android:tint="@color/colorGreen"
-            app:layout_constraintEnd_toEndOf="@id/separatorView"
-            app:layout_constraintTop_toBottomOf="@id/sourceDeviceState"/>
-        <View
-            android:id="@+id/separatorView"
-            android:layout_width="2dp"
-            android:layout_height="55dp"
-            android:background="@color/colorGray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-        <TextView
-            android:id="@+id/actionText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/text_action"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorGray"
-            app:layout_constraintStart_toEndOf="@id/separatorView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <LinearLayout
-            android:id="@+id/actionDeviceLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@id/separatorView"
-            app:layout_constraintTop_toBottomOf="@id/actionText">
-            <android.support.v7.widget.AppCompatImageView
+                android:textColor="@color/colorGray"/>
+            <LinearLayout
+                android:id="@+id/sourceDeviceLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_router_black_24dp"
-                android:tint="@color/colorMetal"/>
-            <TextView
-                android:id="@+id/actionDeviceText"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/sourceDeviceImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_router_black_24dp"
+                    android:tint="@color/colorMetal"/>
+                <TextView
+                    android:id="@+id/sourceDeviceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:text="SourceDevice"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorMetal"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="3dp"
-                android:text="ActionDevice"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorMetal"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/sourceAttributeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_memory_black_24dp"
+                    android:tint="@color/colorMetal"/>
+                <TextView
+                    android:id="@+id/sourceAttributeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:text="SourceAttribute"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorMetal"/>
+            </LinearLayout>
         </LinearLayout>
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/actionDeviceState"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_lens_black_24dp"
-            android:tint="@color/colorGreen"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sourceText"/>
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@id/separatorView"
-            app:layout_constraintTop_toBottomOf="@id/actionDeviceLayout">
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_memory_black_24dp"
-                android:tint="@color/colorMetal"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:elevation="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="2dp"
+            android:paddingBottom="3dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
+            android:background="@drawable/card_background">
             <TextView
-                android:id="@+id/actionAttributeText"
+                android:id="@+id/actionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="3dp"
-                android:text="SourceAttribute"
-                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/text_action"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/colorMetal"/>
+                android:textColor="@color/colorGray"/>
+            <LinearLayout
+                android:id="@+id/actionDeviceLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/actionDeviceImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_router_black_24dp"
+                    android:tint="@color/colorMetal"/>
+                <TextView
+                    android:id="@+id/actionDeviceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:text="ActionDevice"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorMetal"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/actionAttributeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_memory_black_24dp"
+                    android:tint="@color/colorMetal"/>
+                <TextView
+                    android:id="@+id/actionAttributeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:text="ActionAttribute"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorMetal"/>
+            </LinearLayout>
         </LinearLayout>
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/actionAttributeState"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_lens_black_24dp"
-            android:tint="@color/colorGreen"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/actionDeviceState"/>
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="10dp">
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/detailsButton"
             android:layout_width="wrap_content"

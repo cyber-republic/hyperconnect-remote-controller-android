@@ -14,7 +14,6 @@ import com.hyper.connect.database.dao.CategoryRecordDao;
 import com.hyper.connect.database.dao.DataRecordDao;
 import com.hyper.connect.database.dao.DeviceDao;
 import com.hyper.connect.database.dao.EventDao;
-import com.hyper.connect.database.dao.FavoriteChartDao;
 import com.hyper.connect.database.dao.NotificationDao;
 import com.hyper.connect.database.dao.SensorDao;
 import com.hyper.connect.database.entity.Attribute;
@@ -22,7 +21,6 @@ import com.hyper.connect.database.entity.Category;
 import com.hyper.connect.database.entity.CategoryRecord;
 import com.hyper.connect.database.entity.DataRecord;
 import com.hyper.connect.database.entity.Device;
-import com.hyper.connect.database.entity.FavoriteChart;
 import com.hyper.connect.database.entity.Notification;
 import com.hyper.connect.database.entity.enums.DeviceConnectionState;
 import com.hyper.connect.database.entity.enums.DeviceState;
@@ -30,7 +28,7 @@ import com.hyper.connect.database.entity.Event;
 import com.hyper.connect.database.entity.Sensor;
 
 
-@Database(entities={Device.class, Sensor.class, Attribute.class, Event.class, DataRecord.class, Notification.class, Category.class, CategoryRecord.class, FavoriteChart.class}, version=1)
+@Database(entities={Device.class, Sensor.class, Attribute.class, Event.class, DataRecord.class, Notification.class, Category.class, CategoryRecord.class}, version=1)
 public abstract class LocalRoomDatabase extends RoomDatabase{
     public abstract DeviceDao deviceDao();
     public abstract SensorDao sensorDao();
@@ -40,7 +38,6 @@ public abstract class LocalRoomDatabase extends RoomDatabase{
     public abstract NotificationDao notificationDao();
     public abstract CategoryDao categoryDao();
     public abstract CategoryRecordDao categoryRecordDao();
-    public abstract FavoriteChartDao favoriteChartDao();
 
     private static volatile LocalRoomDatabase INSTANCE;
 
@@ -80,7 +77,7 @@ public abstract class LocalRoomDatabase extends RoomDatabase{
 
         @Override
         protected Void doInBackground(final Void... params){
-            Device device=new Device(1, "J1s9bhQJnR8gqWdJpNEfvVQ3ZP1KUqBXxSb8KQPwio3X", "eQ525ffnwHko97n9PWXr99Vu91hwfGyDWXjp5u6qauWYqrQCrx75", "Device1", DeviceState.ACTIVE, DeviceConnectionState.OFFLINE, false);
+            Device device=new Device(1, "J1s9bhQJnR8gqWdJpNEfvVQ3ZP1KUqBXxSb8KQPwio3X", "eQ525ffnwHko97n9PWXr99Vu91hwfGyDWXjp5u6qauWYqrQCrx75", "Device1", DeviceState.ACTIVE, DeviceConnectionState.OFFLINE);
             deviceDao.insert(device);
 
             return null;

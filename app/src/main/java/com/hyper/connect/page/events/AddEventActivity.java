@@ -416,7 +416,7 @@ public class AddEventActivity extends AppCompatActivity{
 
 
         addEventButton.setOnClickListener(buttonView -> {
-            boolean canContinue=true;
+            boolean canContinue=false;
 
             Device sourceDevice=(Device)sourceDeviceSpinner.getSelectedItem();
             Device actionDevice=(Device)actionDeviceSpinner.getSelectedItem();
@@ -429,27 +429,24 @@ public class AddEventActivity extends AppCompatActivity{
 
             if(eventValue.isEmpty()){
                 Snackbar.make(addEventButton, R.string.snack_event_value_is_empty, Snackbar.LENGTH_SHORT).show();
-                canContinue=false;
             }
             else if(triggerValue.isEmpty()){
                 Snackbar.make(addEventButton, R.string.snack_event_trigger_value_is_empty, Snackbar.LENGTH_SHORT).show();
-                canContinue=false;
             }
             else if(eventName.isEmpty()){
                 Snackbar.make(addEventButton, R.string.snack_event_name_is_empty, Snackbar.LENGTH_SHORT).show();
-                canContinue=false;
             }
             else if(sourceDevice.getConnectionState()==DeviceConnectionState.OFFLINE && actionDevice.getConnectionState()==DeviceConnectionState.OFFLINE){
                 Snackbar.make(addEventButton, R.string.snack_event_source_action_device_must_be_online, Snackbar.LENGTH_SHORT).show();
-                canContinue=false;
             }
             else if(sourceDevice.getConnectionState()==DeviceConnectionState.OFFLINE){
                 Snackbar.make(addEventButton, R.string.snack_event_source_device_must_be_online, Snackbar.LENGTH_SHORT).show();
-                canContinue=false;
             }
             else if(actionDevice.getConnectionState()==DeviceConnectionState.OFFLINE){
                 Snackbar.make(addEventButton, R.string.snack_event_action_device_must_be_online, Snackbar.LENGTH_SHORT).show();
-                canContinue=false;
+            }
+            else{
+                canContinue=true;
             }
 
             if(canContinue){
@@ -475,8 +472,7 @@ public class AddEventActivity extends AppCompatActivity{
                 boolean actionMessageCheck=true;
                 if(eventType==EventType.LOCAL){
                     jsonObject.addProperty("edgeType", EventEdgeType.SOURCE_AND_ACTION.getValue());
-                    String jsonString=jsonObject.toString();
-                    sourceMessageCheck=elastosCarrier.sendFriendMessage(newEvent.getSourceDeviceUserId(), jsonString);
+                    sourceMessageCheck=elastosCarrier.sendFriendMessage(newEvent.getSourceDeviceUserId(), jsonObject.toString());
                 }
                 else if(eventType==EventType.GLOBAL){
                     jsonObject.addProperty("edgeType", EventEdgeType.SOURCE.getValue());
@@ -485,12 +481,14 @@ public class AddEventActivity extends AppCompatActivity{
                     actionMessageCheck=elastosCarrier.sendFriendMessage(newEvent.getActionDeviceUserId(), jsonObject.toString());
                 }
 
-                LocalRepository localRepository=elastosCarrier.getLocalRepository();
-                localRepository.insertEvent(newEvent);
-
                 if(sourceMessageCheck && actionMessageCheck){
+                    LocalRepository localRepository=elastosCarrier.getLocalRepository();
+                    localRepository.insertEvent(newEvent);
                     setResult(RESULT_OK);
                     finish();
+                }
+                else{
+                    Snackbar.make(addEventButton, R.string.snack_something_went_wrong, Snackbar.LENGTH_SHORT).show();
                 }
             }
         });

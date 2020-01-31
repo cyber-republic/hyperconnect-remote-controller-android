@@ -94,10 +94,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         private TextView sourceAttributeText;
         private TextView actionDeviceText;
         private TextView actionAttributeText;
-        private AppCompatImageView sourceDeviceState;
-        private AppCompatImageView sourceAttributeState;
-        private AppCompatImageView actionDeviceState;
-        private AppCompatImageView actionAttributeState;
+        private AppCompatImageView sourceDeviceImage;
+        private AppCompatImageView sourceAttributeImage;
+        private AppCompatImageView actionDeviceImage;
+        private AppCompatImageView actionAttributeImage;
         private Device sourceDevice;
         private Attribute sourceAttribute;
         private Device actionDevice;
@@ -114,10 +114,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             sourceAttributeText=itemView.findViewById(R.id.sourceAttributeText);
             actionDeviceText=itemView.findViewById(R.id.actionDeviceText);
             actionAttributeText=itemView.findViewById(R.id.actionAttributeText);
-            sourceDeviceState=itemView.findViewById(R.id.sourceDeviceState);
-            sourceAttributeState=itemView.findViewById(R.id.sourceAttributeState);
-            actionDeviceState=itemView.findViewById(R.id.actionDeviceState);
-            actionAttributeState=itemView.findViewById(R.id.actionAttributeState);
+            sourceDeviceImage=itemView.findViewById(R.id.sourceDeviceImage);
+            sourceAttributeImage=itemView.findViewById(R.id.sourceAttributeImage);
+            actionDeviceImage=itemView.findViewById(R.id.actionDeviceImage);
+            actionAttributeImage=itemView.findViewById(R.id.actionAttributeImage);
         }
 
         void bind(Event event){
@@ -140,10 +140,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     sourceDevice=device;
                     sourceDeviceText.setText(device.getName());
                     if(device.getConnectionState()==DeviceConnectionState.ONLINE){
-                        sourceDeviceState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
+                        sourceDeviceImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
                     }
                     else if(device.getConnectionState()==DeviceConnectionState.OFFLINE){
-                        sourceDeviceState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
+                        sourceDeviceImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
                     }
                 }
             });
@@ -152,10 +152,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     sourceAttribute=attribute;
                     sourceAttributeText.setText(attribute.getName());
                     if(attribute.getState()==AttributeState.ACTIVE){
-                        sourceAttributeState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
+                        sourceAttributeImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
                     }
                     else if(attribute.getState()==AttributeState.DEACTIVATED){
-                        sourceAttributeState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
+                        sourceAttributeImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
                     }
                 }
             });
@@ -164,10 +164,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     actionDevice=device;
                     actionDeviceText.setText(device.getName());
                     if(device.getConnectionState()==DeviceConnectionState.ONLINE){
-                        actionDeviceState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
+                        actionDeviceImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
                     }
                     else if(device.getConnectionState()==DeviceConnectionState.OFFLINE){
-                        actionDeviceState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
+                        actionDeviceImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
                     }
                 }
             });
@@ -176,10 +176,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     actionAttribute=attribute;
                     actionAttributeText.setText(attribute.getName());
                     if(attribute.getState()==AttributeState.ACTIVE){
-                        actionAttributeState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
+                        actionAttributeImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorGreen)));
                     }
                     else if(attribute.getState()==AttributeState.DEACTIVATED){
-                        actionAttributeState.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
+                        actionAttributeImage.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(appContext, R.color.colorRed)));
                     }
                 }
             });
@@ -225,8 +225,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                         boolean actionMessageCheck=true;
                         if(event.getType()==EventType.LOCAL){
                             jsonObject.addProperty("edgeType", EventEdgeType.SOURCE_AND_ACTION.getValue());
-                            String jsonString=jsonObject.toString();
-                            sourceMessageCheck=elastosCarrier.sendFriendMessage(event.getSourceDeviceUserId(), jsonString);
+                            sourceMessageCheck=elastosCarrier.sendFriendMessage(event.getSourceDeviceUserId(), jsonObject.toString());
                         }
                         else if(event.getType()==EventType.GLOBAL){
                             jsonObject.addProperty("edgeType", EventEdgeType.SOURCE.getValue());

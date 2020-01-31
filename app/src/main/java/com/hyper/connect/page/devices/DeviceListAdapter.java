@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.hyper.connect.R;
 import com.hyper.connect.app.GlobalApplication;
 import com.hyper.connect.app.LocalRepository;
@@ -237,18 +238,18 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                 confirmButton.setOnClickListener(viewButton -> {
                     dialog.dismiss();
 
-                    device.setDeletedState(true);
-                    localRepository.updateDevice(device);
-                    Snackbar.make(moreButton, R.string.snack_remove_device, Snackbar.LENGTH_SHORT).show();
+                    JsonObject jsonObject=new JsonObject();
+                    jsonObject.addProperty("command", "removeMe");
+                    elastosCarrier.sendFriendMessage(device.getUserId(), jsonObject.toString());
 
-                    /*boolean removeCheck=elastosCarrier.removeFriend(device.getUserId());
+                    boolean removeCheck=elastosCarrier.removeFriend(device.getUserId());
                     if(removeCheck){
                         localRepository.deleteDevice(device);
                         Snackbar.make(moreButton, R.string.snack_remove_device, Snackbar.LENGTH_SHORT).show();
                     }
                     else{
                         Snackbar.make(moreButton, R.string.snack_something_went_wrong, Snackbar.LENGTH_SHORT).show();
-                    }*/
+                    }
                 });
                 dialog.show();
             });
